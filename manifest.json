@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Simplified Twitter",
+  "version": "1.0.0",
+  "description": "Display the Twitter website in a simplified way.",
+  "short_name": "Simplified Twitter",
+  "permissions": [],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://twitter.com/*",
+        "https://mobile.twitter.com/*"
+      ],
+      "js": [
+        "index.js"
+      ]
+    }
+  ]
+}
