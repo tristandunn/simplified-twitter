@@ -1,28 +1,27 @@
 (function () {
-  function inject(method) {
-    const script = document.createElement("script");
+        script    = document.createElement("script"),
+        style     = document.createElement("style"),
+        { body }  = document,
+        injection = () => {
+          addEventListener("resize", () => {
+            const oldWidth = innerWidth,
+                  newWidth = Math.min(outerWidth, 800);
 
-    script.text = `(${method.toString()})();`;
+            window.innerWidth = newWidth;
 
-    document.documentElement.appendChild(script);
-  }
+            if (oldWidth !== newWidth) {
+              dispatchEvent(new Event("resize"));
+            }
+          });
 
-  inject(function() {
-    function update() {
-      window.innerWidth = Math.min(window.outerWidth, 800);
+          addEventListener("load", () => {
+            dispatchEvent(new Event("resize"));
+          });
+        };
 
-      document.querySelector("#react-root main").style.flexGrow = 1;
-    }
+  script.text     = `(${injection.toString()})();`;
+  style.innerText = "main { flex-grow: 1 !important; }";
 
-    function dispatchUpdate() {
-      setTimeout(function() {
-        window.dispatchEvent(new Event("resize"));
-      }, 100);
-    }
-
-    window.addEventListener("load", dispatchUpdate);
-    window.addEventListener("resize", update);
-
-    document.addEventListener("visibilitychange", dispatchUpdate);
-  });
+  body.appendChild(style);
+  body.appendChild(script);
 })();
